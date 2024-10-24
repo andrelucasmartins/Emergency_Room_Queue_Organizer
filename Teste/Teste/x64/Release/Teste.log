@@ -1,0 +1,9 @@
+﻿  main.c
+LINK : warning LNK4098: defaultlib 'LIBCMT' conflita com uso de outras bibliotecas; use /NODEFAULTLIB:library
+main.obj : error LNK2001: símbolo externo não resolvido __imp_glViewport
+main.obj : error LNK2001: símbolo externo não resolvido __imp_glClear
+main.obj : error LNK2001: símbolo externo não resolvido __imp_glClearColor
+glew32s.lib(glew.obj) : error LNK2001: símbolo externo não resolvido __imp_glGetString
+glew32s.lib(glew.obj) : error LNK2001: símbolo externo não resolvido __imp_wglGetCurrentDC
+glew32s.lib(glew.obj) : error LNK2001: símbolo externo não resolvido __imp_wglGetProcAddress
+D:\Projetos C\Teste\Teste\x64\Release\Teste.exe : fatal error LNK1120: 6 externo não resolvidos
