@@ -20,7 +20,7 @@ void defineColor(int prioridade) {
     case 2: r = 1.0f; g = 0.5f; b = 0.0f; break; // Laranja
     case 3: r = 1.0f; g = 1.0f; b = 0.0f; break; // Amarelo
     case 4: r = 0.0f; g = 1.0f; b = 0.0f; break; // Verde
-    case 5: r = 0.0f; g = 0.0f; b = 1.0f; break; // Azul
+    case 5: r = 0.3f; g = 0.6f; b = 0.8f; break; // Azul 
     default: r = 1.0f; g = 0.0f; b = 0.0f; break; // Padrão vermelho
     }
 }
