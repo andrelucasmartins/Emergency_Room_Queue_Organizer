@@ -2,13 +2,16 @@
 #include <GLFW/glfw3.h>
 #include <freeglut.h>  
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
+#include <time.h>
 
-// Variáveis dos dados de entrada
+#define SENHA_MAX 100
+
+// Variáveis para armazenar os dados de entrada
 int senha;
 int guiche;
 int prioridade;
-float r = 1.0f, g = 0.0f, b = 0.0f; // Cor default do retângulo
+float r = 1.0f, g = 0.0f, b = 0.0f; // Cor padrão do retângulo
 
 // Função para definir a cor com base na prioridade
 void defineColor(int prioridade) {
@@ -18,7 +21,30 @@ void defineColor(int prioridade) {
     case 3: r = 1.0f; g = 1.0f; b = 0.0f; break; // Amarelo
     case 4: r = 0.0f; g = 1.0f; b = 0.0f; break; // Verde
     case 5: r = 0.0f; g = 0.0f; b = 1.0f; break; // Azul
-    default: r = 1.0f; g = 0.0f; b = 0.0f; break; // Vermelho cor padrão
+    default: r = 1.0f; g = 0.0f; b = 0.0f; break; // Padrão vermelho
+    }
+}
+
+// Função para ler a senha armazenada em um arquivo
+int loadSenha() {
+    FILE* file = fopen("senha.txt", "r");
+    int senha = 0; 
+
+    if (file) {
+        fscanf_s(file, "%d", &senha);
+        fclose(file);
+    }
+
+    return senha;
+}
+
+// Função para salvar a senha atual em um arquivo
+void saveSenha(int senha) {
+    FILE* file = fopen("senha.txt", "w");
+
+    if (file) {
+        fprintf(file, "%d", senha);
+        fclose(file);
     }
 }
 
@@ -55,27 +81,31 @@ void drawScreen() {
     snprintf(buffer, sizeof(buffer), "GUICHE: %d", guiche);
     renderText(buffer, -0.8f, 0.2f);
 
-    snprintf(buffer, sizeof(buffer), "PRIORIDADE: ", prioridade);
+    snprintf(buffer, sizeof(buffer), "PRIORIDADE:", prioridade);
     renderText(buffer, -0.8f, -0.1f);
 
+    // Retângulo com cor da prioridade
     renderBlock(-0.8f, -0.5f, 0.8f, -0.2f, r, g, b); 
 }
 
 int main(int argc, char** argv) {
-    // Recebe os dados para exibição
-    printf("Digite a senha: ");
-    scanf_s("%d", &senha);
+    
+    srand(time(NULL));
 
-    printf("Digite o numero do guiche: ");
-    scanf_s("%d", &guiche);
+    senha = loadSenha();
+    senha = (senha % SENHA_MAX) + 1;
+    
+    saveSenha(senha);
+
+    guiche = (rand() % 3) + 1;
 
     printf("Digite a prioridade (1 a 5): ");
     scanf_s("%d", &prioridade);
 
-    // Define a cor com base no valor inserido no campo prioridade
+  
     defineColor(prioridade);
 
-   
+    // Inicia o GLUT e o GLFW
     glutInit(&argc, argv);
 
     if (!glfwInit()) {
