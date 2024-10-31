@@ -11,7 +11,7 @@
 int senha;
 int guiche;
 int prioridade;
-float r = 1.0f, g = 0.0f, b = 0.0f; // Cor padrão do retângulo
+float r, g, b; // Cor padrão do retângulo
 
 // Função para definir a cor com base na prioridade
 void defineColor(int prioridade) {
@@ -91,7 +91,7 @@ void drawScreen() {
 int main(int argc, char** argv) {
     
     srand(time(NULL));
-
+    // Carrega o último valor da senha e adiciona 1 
     senha = loadSenha();
     senha = (senha % SENHA_MAX) + 1;
     
