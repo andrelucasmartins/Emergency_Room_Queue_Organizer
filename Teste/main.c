@@ -4,49 +4,78 @@
 #include <stdio.h>
 #include <string.h>
 
-// Fun��o para fazer o texto usando GLUT
-void renderText(const char* text, float x, float y) {
-    glRasterPos2f(x, y); 
-    for (const char* c = text; *c != '\0'; c++) {
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c); 
+// Variáveis dos dados de entrada
+int senha;
+int guiche;
+int prioridade;
+float r = 1.0f, g = 0.0f, b = 0.0f; // Cor default do retângulo
+
+// Função para definir a cor com base na prioridade
+void defineColor(int prioridade) {
+    switch (prioridade) {
+    case 1: r = 1.0f; g = 0.0f; b = 0.0f; break; // Vermelho
+    case 2: r = 1.0f; g = 0.5f; b = 0.0f; break; // Laranja
+    case 3: r = 1.0f; g = 1.0f; b = 0.0f; break; // Amarelo
+    case 4: r = 0.0f; g = 1.0f; b = 0.0f; break; // Verde
+    case 5: r = 0.0f; g = 0.0f; b = 1.0f; break; // Azul
+    default: r = 1.0f; g = 0.0f; b = 0.0f; break; // Vermelho cor padrão
     }
 }
 
+// Função para fazer o texto usando GLUT
+void renderText(const char* text, float x, float y) {
+    glRasterPos2f(x, y);
+    for (const char* c = text; *c != '\0'; c++) {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c);
+    }
+}
 
-// Fun��o para fazer o bloco na tela
+// Função para renderizar o bloco na tela
 void renderBlock(float x1, float y1, float x2, float y2, float r, float g, float b) {
-    glColor3f(r, g, b); 
-    glBegin(GL_QUADS);  
-    glVertex2f(x1, y1);  
-    glVertex2f(x2, y1); 
-    glVertex2f(x2, y2);  
-    glVertex2f(x1, y2); 
+    glColor3f(r, g, b);
+    glBegin(GL_QUADS);
+    glVertex2f(x1, y1);
+    glVertex2f(x2, y1);
+    glVertex2f(x2, y2);
+    glVertex2f(x1, y2);
     glEnd();
 }
 
-// Fun��o para imprimir os textos na tela, senha, guiche e prioridade
+// Função para imprimir os textos na tela, senha, guiche e prioridade
 void drawScreen() {
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); 
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-   
-    glColor3f(0.0f, 0.0f, 0.0f); 
+    glColor3f(0.0f, 0.0f, 0.0f);
 
+    char buffer[50];
+    snprintf(buffer, sizeof(buffer), "SENHA: %d", senha);
+    renderText(buffer, -0.8f, 0.5f);
 
-    renderText("SENHA: 1234", -0.8f, 0.5f);
+    snprintf(buffer, sizeof(buffer), "GUICHE: %d", guiche);
+    renderText(buffer, -0.8f, 0.2f);
 
-    
-    renderText("GUICHE: 5", -0.8f, 0.2f);
+    snprintf(buffer, sizeof(buffer), "PRIORIDADE: ", prioridade);
+    renderText(buffer, -0.8f, -0.1f);
 
-
-    renderText("PRIORIDADE:", -0.8f, -0.1f);
-
-
-    renderBlock(-0.8f, -0.5f, 0.8f, -0.2f, 1.0f, 0.0f, 0.0f);
+    renderBlock(-0.8f, -0.5f, 0.8f, -0.2f, r, g, b); 
 }
 
 int main(int argc, char** argv) {
-    // Inicia o GLUT e o GLFW
+    // Recebe os dados para exibição
+    printf("Digite a senha: ");
+    scanf_s("%d", &senha);
+
+    printf("Digite o numero do guiche: ");
+    scanf_s("%d", &guiche);
+
+    printf("Digite a prioridade (1 a 5): ");
+    scanf_s("%d", &prioridade);
+
+    // Define a cor com base no valor inserido no campo prioridade
+    defineColor(prioridade);
+
+   
     glutInit(&argc, argv);
 
     if (!glfwInit()) {
@@ -65,10 +94,8 @@ int main(int argc, char** argv) {
     glfwMakeContextCurrent(window);
     glewInit();
 
-    
     while (!glfwWindowShouldClose(window)) {
-        drawScreen(); 
-
+        drawScreen();
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
